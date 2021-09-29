@@ -1,0 +1,11 @@
+{
+    "log_file": "/var/log/cron-job/routine-1.log",
+    "scripts": [
+        {
+            "spec": "*/10 * * * * *",
+            "command": ["echo" , "routine-1"],
+            "timeout": 0,
+            "multi_processing_limit": 0
+        }
+    ]
+}

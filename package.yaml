@@ -1,0 +1,16 @@
+meta:
+  description: Cron job
+  vendor: Leonardo Bein
+  maintainer: Leonardo Bein <leonardobein@gmail.com>
+files:
+  "/usr/local/bin/cron-service":
+    file: bin/cron-service
+    mode: "0755"
+    user: "root"
+  "/usr/local/etc/cron/routine-1.json":
+    file: package/conf/routine-1.json
+    mode: "0644"
+    user: "cron"
+units:
+  - package/scripts/systemd/cron-job.service
+user: cron
