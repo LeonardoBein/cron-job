@@ -1,3 +1,6 @@
+mkdir -p /var/log/cron-job/
+chown -R cron:cron /var/log/cron-job/
+
 cat <<EOF
 cron-job has been installed as a systemd service.
 

@@ -13,4 +13,6 @@ files:
     user: "cron"
 units:
   - package/scripts/systemd/cron-job.service
+scripts:
+  "post-install": package/scripts/postinstall.sh
 user: cron
