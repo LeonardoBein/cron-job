@@ -12,3 +12,6 @@ ExecStart=/usr/local/bin/cron-service --path=/usr/local/etc/cron
 WorkingDirectory=/usr/local/etc/cron
 StandardOutput=inherit
 StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target
