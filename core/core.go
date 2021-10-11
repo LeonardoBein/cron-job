@@ -3,7 +3,6 @@ package core
 import (
 	"context"
 	"flag"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -17,7 +16,8 @@ import (
 	"github.com/robfig/cron"
 )
 
-func createFunc(config *entity.CronJob, logger *log.Logger) func() {
+func createFunc(config entity.CronJob, logger *log.Logger) func() {
+	logger.Println(config.Command)
 	return func() {
 
 		if config.IsRunning && config.MultiProcessingLimit <= 1 {
@@ -53,6 +53,7 @@ func createFunc(config *entity.CronJob, logger *log.Logger) func() {
 		if err != nil {
 			logger.Printf("ERROR\t%s\t%s\t%s\n", time.Since(startCommand), strings.Join(config.Command, " "), err)
 			config.IsRunning = false
+			config.MultiProcessingCount--
 			return
 		}
 
@@ -78,17 +79,16 @@ func Run() {
 
 	c := cron.New()
 
-	for _, cnf := range allConfig {
-		fmt.Println(cnf.Scripts)
+	for i := 0; i < len(allConfig); i++ {
 
-		for i := 0; i < len(cnf.Scripts); i++ {
+		for j := 0; j < len(allConfig[i].Scripts); j++ {
 
 			var writerLog io.Writer
 
 			writerLog = io.MultiWriter(os.Stdout)
 
-			if cnf.LogFile != nil {
-				logFile, err := os.Create(*cnf.LogFile)
+			if allConfig[i].LogFile != nil {
+				logFile, err := os.Create(*allConfig[i].LogFile)
 
 				if err != nil {
 					panic(err)
@@ -99,7 +99,7 @@ func Run() {
 
 			logger := log.New(writerLog, "", log.LstdFlags)
 
-			c.AddFunc(cnf.Scripts[i].Spec, createFunc(&cnf.Scripts[i], logger))
+			c.AddFunc(allConfig[i].Scripts[j].Spec, createFunc(allConfig[i].Scripts[j], logger))
 		}
 
 	}
